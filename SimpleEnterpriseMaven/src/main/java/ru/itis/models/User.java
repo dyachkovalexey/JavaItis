@@ -7,11 +7,13 @@ public class User {
     private String name;
     private String password;
     private int age;
+    private int id;
 
-    public User(String name, String password, int age) {
+    public User(String name, String password, int age, int id) {
         this.name = name;
         this.password = password;
         this.age = age;
+        this.id = id;
     }
 
     public String getName() {
@@ -25,4 +27,6 @@ public class User {
     public int getAge() {
         return age;
     }
+
+    public int getId() { return  id; }
 }

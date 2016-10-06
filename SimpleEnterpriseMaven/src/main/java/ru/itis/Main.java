@@ -8,7 +8,7 @@ package ru.itis;
 public class Main {
 
     public static void main(String[] args) {
-        UsersDao usersDao = new UsersDaoFileBasedImpl("C:\\Users\\KFU-user\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\users.txt");
+        UsersDao usersDao = new UsersDaoFileBasedImpl("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\users.txt");
 
         SimpleUsersService service = new SimpleUsersServiceImpl(usersDao);
 

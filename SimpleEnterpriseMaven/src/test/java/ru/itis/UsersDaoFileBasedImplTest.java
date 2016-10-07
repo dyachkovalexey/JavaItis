@@ -42,7 +42,7 @@ public class UsersDaoFileBasedImplTest {
 
     @Before
     public void setUp() throws Exception {
-        usersDao = new UsersDaoFileBasedImpl("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\users.txt");
+        usersDao = new UsersDaoFileBasedImpl();
     }
 
     @Test

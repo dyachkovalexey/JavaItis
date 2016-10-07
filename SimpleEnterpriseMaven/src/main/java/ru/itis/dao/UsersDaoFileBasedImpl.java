@@ -6,17 +6,28 @@ import ru.itis.models.User;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class UsersDaoFileBasedImpl implements UsersDao {
 
-    private BufferedReader fileReader;
-    private static String filePath = "C:\\Users\\Lo0ny\\Desktop\\JavaItis\\SimpleEnterpriseMaven";
+    private Properties properties;
 
-    public UsersDaoFileBasedImpl(String fileName) {
+    private BufferedReader fileReader;
+
+    private String originFilePath;
+    private String supportFilePath;
+
+    public UsersDaoFileBasedImpl() {
         try {
-            fileReader = new BufferedReader(new FileReader(fileName));
+            properties = new Properties();
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\src\\main\\resources\\filePaths.properties"));
+            this.originFilePath = properties.getProperty("originPath");
+            this.supportFilePath = properties.getProperty("supportPath");
+            fileReader = new BufferedReader(new FileReader(originFilePath));
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            throw new IllegalArgumentException(e);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -50,9 +61,11 @@ public class UsersDaoFileBasedImpl implements UsersDao {
     @Override
     public void save(User user) {
         try {
-            FileWriter fileWriter = new FileWriter(filePath + "\\users.txt",true);
-            fileWriter.write(user.getName() + " " + user.getPassword() + " " + user.getAge() + " " + user.getId() + "\n");
-            fileWriter.close();
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(originFilePath + "\\users.txt",true));
+            bufferedWriter.newLine();
+            bufferedWriter.write(user.getName() + " " + user.getPassword() + " " + user.getAge() + " " + user.getId());
+
+            bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,18 +80,22 @@ public class UsersDaoFileBasedImpl implements UsersDao {
 
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\users.txt"));
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\tmpUsers.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(originFilePath));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(supportFilePath));
             while ((currentLine = bufferedReader.readLine()) != null) {
                 String trimmedLine = currentLine.trim();
                 if (trimmedLine.equals(lineToDelete)) continue;
                 bufferedWriter.write(currentLine + System.getProperty("line.separator"));
             }
-            File f1 = new File(filePath + "\\users.txt");
-            File f2 = new File(filePath + "\\tmpUsers.txt");
+
+            File f1 = new File(originFilePath);
+            File f2 = new File(supportFilePath);
+
+
             f1.delete();
             f2.renameTo(f1);
             f2.createNewFile();
+
             bufferedWriter.close();
             bufferedReader.close();
         } catch (FileNotFoundException e) {

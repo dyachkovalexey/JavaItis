@@ -13,6 +13,6 @@ public class Main {
 
         SimpleUsersService service = new SimpleUsersServiceImpl(usersDao);
 
-        System.out.println(service.isRegistered("Marsel", "qwerty008"));
+        System.out.println(service.isRegistered("Marsel", "qwerty007"));
     }
 }

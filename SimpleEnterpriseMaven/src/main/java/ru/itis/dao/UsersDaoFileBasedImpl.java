@@ -20,7 +20,7 @@ public class UsersDaoFileBasedImpl implements UsersDao {
     public UsersDaoFileBasedImpl() {
         try {
             properties = new Properties();
-            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\src\\main\\resources\\filePaths.properties"));
+            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\src\\main\\resources\\filePaths.properties"));
             this.originFilePath = properties.getProperty("originPath");
             this.supportFilePath = properties.getProperty("supportPath");
             fileReader = new BufferedReader(new FileReader(originFilePath));
@@ -61,7 +61,7 @@ public class UsersDaoFileBasedImpl implements UsersDao {
     @Override
     public void save(User user) {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(originFilePath + "\\users.txt",true));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(originFilePath,true));
             bufferedWriter.newLine();
             bufferedWriter.write(user.getName() + " " + user.getPassword() + " " + user.getAge() + " " + user.getId());
 

@@ -20,13 +20,13 @@ public class UsersSupportFactory {
         properties = new Properties();
 
         try {
-            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\src\\main\\resources\\users.properties"));
+            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\SimpleEnterpriseMaven\\src\\main\\resources\\users.properties"));
 
             String usersDaoClass = properties.getProperty("user.class");
             String simpleUsersService = properties.getProperty("service.class");
 
             this.usersDao = (UsersDao)Class.forName(usersDaoClass).newInstance();
-            this.simpleUsersService = (SimpleUsersService)Class.forName(simpleUsersService).newInstance();
+            //this.simpleUsersService = (SimpleUsersService)Class.forName(simpleUsersService).newInstance();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         } catch (ClassNotFoundException e) {

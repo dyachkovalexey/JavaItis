@@ -46,6 +46,15 @@ public class UsersDaoFileBasedImpl implements UsersDao {
         return result;
     }
 
+    public void replace(BufferedReader bf, BufferedWriter bw, String lineToDelete) throws IOException {
+        String currentLine;
+        while ((currentLine = bf.readLine()) != null) {
+            String trimmedLine = currentLine.trim();
+            if (trimmedLine.equals(lineToDelete)) continue;
+            bw.write(currentLine + System.getProperty("line.separator"));
+        }
+    }
+
     @Override
     public User get(int userId) {
         List<User> registeredUsers = getAll();
@@ -74,7 +83,7 @@ public class UsersDaoFileBasedImpl implements UsersDao {
     @Override
     public void delete(int userId) {
         User userDeleted = get(userId);
-        String currentLine;
+
         String lineToDelete = userDeleted.getName() + " " + userDeleted.getPassword() + " " +
                 + userDeleted.getAge() + " " + userDeleted.getId();
 
@@ -82,22 +91,29 @@ public class UsersDaoFileBasedImpl implements UsersDao {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(originFilePath));
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(supportFilePath));
+
+            replace(bufferedReader, bufferedWriter, lineToDelete);
+            bufferedWriter.close();
+            bufferedReader.close();
+
+            bufferedReader = new BufferedReader(new FileReader(supportFilePath));
+            bufferedWriter = new BufferedWriter(new FileWriter(originFilePath));
+
+            replace(bufferedReader, bufferedWriter, "-1");
+            bufferedWriter.close();
+            bufferedReader.close();
+
+            /*
+
+            bufferedWriter.write("");
             while ((currentLine = bufferedReader.readLine()) != null) {
                 String trimmedLine = currentLine.trim();
                 if (trimmedLine.equals(lineToDelete)) continue;
                 bufferedWriter.write(currentLine + System.getProperty("line.separator"));
-            }
-
-            File f1 = new File(originFilePath);
-            File f2 = new File(supportFilePath);
+            }*/
 
 
-            f1.delete();
-            f2.renameTo(f1);
-            f2.createNewFile();
 
-            bufferedWriter.close();
-            bufferedReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

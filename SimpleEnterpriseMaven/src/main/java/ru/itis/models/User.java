@@ -1,9 +1,12 @@
 package ru.itis.models;
 
+import java.util.List;
+
 /**
  * Created by admin on 06.10.2016.
  */
 public class User {
+    private List<Auto> autos;
     private String name;
     private String password;
     private int age;

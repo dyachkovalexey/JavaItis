@@ -6,7 +6,10 @@ import dao.OwnersDao;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLData;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -17,26 +20,25 @@ public class SupportFactory {
     private static  SupportFactory instance;
 
     private Properties properties;
-    private MyConnection myConnection;
+    private Connection connection;
 
     private SupportFactory() {
-        properties = new Properties();
-
         try {
-            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
+            properties = new Properties();
+            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
 
-            String connectionClass = properties.getProperty("connection.class");
+            Class.forName("org.postgresql.Driver");
+            this.connection = null;
 
-            this.myConnection = (MyConnection)Class.forName(connectionClass).newInstance();
+            this.connection = DriverManager.getConnection(properties.getProperty("URL"),
+            properties.getProperty("name"),
+            properties.getProperty("password"));
+
         } catch (ClassNotFoundException e) {
             System.out.println(e);
-        } catch (IllegalAccessException e) {
-            System.out.println(e);
-        } catch (InstantiationException e) {
-            System.out.println(e);
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
         } catch (IOException e) {
+            System.out.println(e);
+        } catch (SQLException e) {
             System.out.println(e);
         }
     }
@@ -49,7 +51,7 @@ public class SupportFactory {
         return instance;
     }
 
-    public MyConnection getMyConnection() {
-        return myConnection;
+    public Connection getConnection() {
+        return this.connection;
     }
 }

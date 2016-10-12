@@ -7,14 +7,4 @@
     <groupId>ru.itis.enteprise</groupId>
     <artifactId>simple-interprise</artifactId>
     <version>1.0</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1102.jdbc41</version>
-        </dependency>
-    </dependencies>
-
-
 </project>

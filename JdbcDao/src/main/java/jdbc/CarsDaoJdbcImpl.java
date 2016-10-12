@@ -1,6 +1,5 @@
 package jdbc;
 
-import connection.MyConnection;
 import connection.SupportFactory;
 import dao.CarsDao;
 import models.Cars;
@@ -12,57 +11,75 @@ import java.sql.*;
  */
 public class CarsDaoJdbcImpl implements CarsDao {
 
-
-    private String URL = "jdbc:postgresql://localhost:5432/Auto";
-    private String name = "postgres";
-    private String password = "jie1995xa";
-
-
-
-
-    public CarsDaoJdbcImpl() {
-        Connection connection = null;
-
-        try {
-            Class.forName("org.postgressql.Driver");
-            connection = DriverManager.getConnection(this.URL, this.name, this.password);
-
-            Statement statement = (Statement) SupportFactory.getInstance().getMyConnection();
-
-
-
-        } catch (ClassNotFoundException e) {
-            System.out.println(e);
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-
-    }
-
+    // language=SQL
+    private static final String SQL_DELETE_FROM_DB = "DELETE FROM auto WHERE auto_id = ?";
+    // language=SQL
+    private static final String SQL_UPDATE_DB = "UPDATE auto SET mileage = ? WHERE auto_id = ?";
+    // language=SQL
+    private static final String SQL_ADD_TO_DB = "INSERT INTO auto (auto_id, auto_name, mileage) VALUES (?, ?, ?);";
 
     public void find(int id) {
-        new CarsDaoJdbcImpl();
-        Statement statement = (Statement) SupportFactory.getInstance().getMyConnection();
         try {
-            ResultSet result = statement.executeQuery("SELECT * FROM auto WHERE auto.auto_id = id");
+            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM auto");
+            while (result.next()) {
+                int autoId = result.getInt("auto_id");
+                if (autoId == id) {
+                    System.out.println(result.getString("auto_name"));
+                    break;
+                }
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
     public void getAll() {
+        try {
+            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM auto ");
+            while (result.next()) {
+                int autoId = result.getInt("auto_id");
+                String autoName = result.getString("auto_name");
+                int mileage = result.getInt("mileage");
 
+                System.out.println("id - " + autoId + ", name - " + autoName + ", mileage - " + mileage);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     public void delete(int id) {
+        try {
+            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_DELETE_FROM_DB);
+            statement.setInt(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
     }
 
     public void update(Cars cars) {
-
+        try {
+            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_UPDATE_DB);
+            statement.setInt(1, cars.getMileage());
+            statement.setInt(2, cars.getCarId());
+            statement.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     public void add(Cars cars) {
-
+        try {
+            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_ADD_TO_DB);
+            statement.setInt(1, cars.getCarId());
+            statement.setString(2, cars.getAutoName());
+            statement.setInt(3, cars.getMileage());
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }

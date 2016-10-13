@@ -1,19 +1,18 @@
-package jdbc;
+package dao;
 
-import connection.SupportFactory;
+import factorys.ConnectSupportFactory;
 import dao.OwnersDao;
 import models.Owners;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by KFU-user on 12.10.2016.
  */
 public class OwnersDaoJdbcImpl implements OwnersDao {
 
+
+    private Connection connection;
     // language=SQL
     private static final String SQL_DELETE_FROM_DB = "DELETE FROM car_owner WHERE owner_id = ?";
     // language=SQL
@@ -22,9 +21,13 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
     private static final String SQL_ADD_TO_DB = "INSERT INTO car_owner (owner_id, fio, owner_age, owner_city) VALUES" +
             " (?, ?, ?, ?)";
 
+    public OwnersDaoJdbcImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     public void find(int id) {
         try {
-            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM car_owner");
             while (result.next()) {
                 int autoId = result.getInt("owner_id");
@@ -40,7 +43,7 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
 
     public void getAll() {
         try {
-            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM car_owner");
             while (result.next()) {
                 int ownerId = result.getInt("owner_id");
@@ -57,7 +60,7 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
 
     public void delete(int id) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_DELETE_FROM_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_DELETE_FROM_DB);
             statement.setInt(1, id);
             statement.execute();
             System.out.println("");
@@ -68,7 +71,7 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
 
     public void update(Owners owners) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_UPDATE_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_UPDATE_DB);
             statement.setInt(1, owners.getOwnerId());
             statement.setInt(2, owners.getOwnerAge());
             statement.execute();
@@ -79,7 +82,7 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
 
     public void add(Owners owners) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_ADD_TO_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_ADD_TO_DB);
             statement.setInt(1, owners.getOwnerId());
             statement.setString(2, owners.getFIO());
             statement.setInt(3, owners.getOwnerAge());

@@ -1,6 +1,6 @@
-package jdbc;
+package dao;
 
-import connection.SupportFactory;
+import factorys.ConnectSupportFactory;
 import dao.CarsDao;
 import models.Cars;
 
@@ -11,6 +11,8 @@ import java.sql.*;
  */
 public class CarsDaoJdbcImpl implements CarsDao {
 
+    private Connection connection;
+
     // language=SQL
     private static final String SQL_DELETE_FROM_DB = "DELETE FROM auto WHERE auto_id = ?";
     // language=SQL
@@ -18,9 +20,13 @@ public class CarsDaoJdbcImpl implements CarsDao {
     // language=SQL
     private static final String SQL_ADD_TO_DB = "INSERT INTO auto (auto_id, auto_name, mileage) VALUES (?, ?, ?);";
 
+    public CarsDaoJdbcImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     public void find(int id) {
         try {
-            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM auto");
             while (result.next()) {
                 int autoId = result.getInt("auto_id");
@@ -36,7 +42,7 @@ public class CarsDaoJdbcImpl implements CarsDao {
 
     public void getAll() {
         try {
-            Statement statement = SupportFactory.getInstance().getConnection().createStatement();
+            Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM auto ");
             while (result.next()) {
                 int autoId = result.getInt("auto_id");
@@ -52,7 +58,7 @@ public class CarsDaoJdbcImpl implements CarsDao {
 
     public void delete(int id) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_DELETE_FROM_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_DELETE_FROM_DB);
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
@@ -63,7 +69,7 @@ public class CarsDaoJdbcImpl implements CarsDao {
 
     public void update(Cars cars) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_UPDATE_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_UPDATE_DB);
             statement.setInt(1, cars.getMileage());
             statement.setInt(2, cars.getCarId());
             statement.execute();
@@ -74,7 +80,7 @@ public class CarsDaoJdbcImpl implements CarsDao {
 
     public void add(Cars cars) {
         try {
-            PreparedStatement statement = SupportFactory.getInstance().getConnection().prepareStatement(SQL_ADD_TO_DB);
+            PreparedStatement statement = ConnectSupportFactory.getInstance().getConnection().prepareStatement(SQL_ADD_TO_DB);
             statement.setInt(1, cars.getCarId());
             statement.setString(2, cars.getAutoName());
             statement.setInt(3, cars.getMileage());

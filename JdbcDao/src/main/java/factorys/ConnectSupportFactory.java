@@ -1,38 +1,34 @@
-package connection;
+package factorys;
 
-import dao.CarsDao;
-import dao.OwnersDao;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLData;
 import java.sql.SQLException;
 import java.util.Properties;
 
 /**
  * Created by KFU-user on 12.10.2016.
  */
-public class SupportFactory {
+public class ConnectSupportFactory {
 
-    private static  SupportFactory instance;
+    private static ConnectSupportFactory instance;
 
     private Properties properties;
     private Connection connection;
 
-    private SupportFactory() {
+    private ConnectSupportFactory() {
         try {
             properties = new Properties();
-            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
 
-            Class.forName("org.postgresql.Driver");
+            Class.forName(properties.getProperty("jdbc.driver"));
             this.connection = null;
 
-            this.connection = DriverManager.getConnection(properties.getProperty("URL"),
-            properties.getProperty("name"),
-            properties.getProperty("password"));
+            this.connection = DriverManager.getConnection(properties.getProperty("jdbc.URL"),
+            properties.getProperty("jdbc.name"),
+            properties.getProperty("jdbc.password"));
 
         } catch (ClassNotFoundException e) {
             System.out.println(e);
@@ -44,10 +40,10 @@ public class SupportFactory {
     }
 
     static {
-        instance = new SupportFactory();
+        instance = new ConnectSupportFactory();
     }
 
-    public static SupportFactory getInstance() {
+    public static ConnectSupportFactory getInstance() {
         return instance;
     }
 

@@ -1,3 +1,4 @@
+import dao.CarsDao;
 import dao.CarsDaoJdbcImpl;
 import dao.OwnersDao;
 import factorys.DaoSupportFactory;
@@ -12,16 +13,14 @@ import java.security.acl.Owner;
  */
 public class Main {
     public static void main(String[] args) {
-        //CarsDaoJdbcImpl carsDaoJdbc = new CarsDaoJdbcImpl();
-        //carsDaoJdbc.find(1);
-        //carsDaoJdbc.getAll();
-        //carsDaoJdbc.delete(1);
-        //Cars cars = new Cars(1, "Audi", 500);
-        //carsDaoJdbc.update(cars);
 
 
         OwnersDao ownersDao = DaoSupportFactory.getInstance().getOwnersDao();
+        CarsDao carsDao = DaoSupportFactory.getInstance().getCarsDao();
 
-        ownersDao.find(1);
+        //ownersDao.find(1);
+        ownersDao.getAll();
+        System.out.println();
+        carsDao.getAll();
     }
 }

@@ -54,7 +54,7 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
                 int ownerAge = result.getInt("owner_age");
                 String city = result.getString("owner_city");
 
-                System.out.println("id - " + ownerId + ", name - " + fio + ", age - " + ownerAge + ", city - " + city);
+                //System.out.println("id - " + ownerId + ", name - " + fio + ", age - " + ownerAge + ", city - " + city);
 
                 owners.add( "id - " + ownerId + ", name - " + fio + ", age - " + ownerAge + ", city - " + city);
             }

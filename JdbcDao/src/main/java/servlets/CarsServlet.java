@@ -37,7 +37,6 @@ public class CarsServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         List<String> result = carsDao.getAll();
         try {
-            //getServletContext().getRequestDispatcher("/hello.jsp").forward(request,response);
             PrintWriter out = response.getWriter();
             out.println("<h1>Список автомобилей:</h1>");
             for (String cars: result)

@@ -33,11 +33,16 @@ public class OwnersServlet extends HttpServlet{
             PrintWriter out = null;
             out = response.getWriter();
             out.println("<h1>Список пользователей:</h1>");
-            for (String owners: result)
-                out.println("<p>" + owners + "</p>");
+            /*for (String owners: result)
+                out.println("<p>" + owners + "</p>");*/
+            request.setAttribute("owners", result);
+            getServletContext().getRequestDispatcher("owners.jsp").forward(request, response);
         } catch (IOException e) {
             System.out.println(e);
+        } catch (ServletException e) {
+            System.out.println(e);
         }
+
     }
 
 }

@@ -15,4 +15,13 @@
         <url-pattern>/cars</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>OwnersServlet</servlet-name>
+        <servlet-class>servlets.OwnersServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OwnersServlet</servlet-name>
+        <url-pattern>/owners</url-pattern>
+    </servlet-mapping>
 </web-app>

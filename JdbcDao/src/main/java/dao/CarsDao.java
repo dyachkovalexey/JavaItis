@@ -2,12 +2,15 @@ package dao;
 
 import models.Cars;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by KFU-user on 12.10.2016.
  */
 public interface CarsDao {
     void find(int id);
-    void getAll();
+    List getAll();
     void delete(int id);
     void update(Cars cars);
     void add(Cars cars);

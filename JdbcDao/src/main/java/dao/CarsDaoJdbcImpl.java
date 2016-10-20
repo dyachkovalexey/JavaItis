@@ -5,6 +5,8 @@ import dao.CarsDao;
 import models.Cars;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by KFU-user on 12.10.2016.
@@ -40,19 +42,22 @@ public class CarsDaoJdbcImpl implements CarsDao {
         }
     }
 
-    public void getAll() {
+    public List getAll() {
         try {
+            ArrayList cars = new ArrayList();
             Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM auto ");
             while (result.next()) {
                 int autoId = result.getInt("auto_id");
                 String autoName = result.getString("auto_name");
                 int mileage = result.getInt("mileage");
-
                 System.out.println("id - " + autoId + ", name - " + autoName + ", mileage - " + mileage);
+                cars.add("id - " + autoId + ", name - " + autoName + ", mileage - " + mileage);
             }
+            return cars;
         } catch (SQLException e) {
             System.out.println(e);
+            return null;
         }
     }
 

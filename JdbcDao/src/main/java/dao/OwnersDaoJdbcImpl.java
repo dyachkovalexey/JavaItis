@@ -5,6 +5,8 @@ import dao.OwnersDao;
 import models.Owners;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by KFU-user on 12.10.2016.
@@ -41,8 +43,9 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
         }
     }
 
-    public void getAll() {
+    public List getAll() {
         try {
+            ArrayList owners = new ArrayList();
             Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM car_owner");
             while (result.next()) {
@@ -52,9 +55,13 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
                 String city = result.getString("owner_city");
 
                 System.out.println("id - " + ownerId + ", name - " + fio + ", age - " + ownerAge + ", city - " + city);
+
+                owners.add( "id - " + ownerId + ", name - " + fio + ", age - " + ownerAge + ", city - " + city);
             }
+            return owners;
         } catch (SQLException e) {
             System.out.println(e);
+            return null;
         }
     }
 

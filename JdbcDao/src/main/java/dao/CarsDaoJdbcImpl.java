@@ -15,6 +15,10 @@ public class CarsDaoJdbcImpl implements CarsDao {
 
     private Connection connection;
 
+    //language=SQL
+    private static final String SQL_GET_ALL = "SELECT * FROM auto";
+    // language=SQL
+    private static final String SQL_FIND_CARS = "SELECT * FROM auto WHERE auto_id = ?";
     // language=SQL
     private static final String SQL_DELETE_FROM_DB = "DELETE FROM auto WHERE auto_id = ?";
     // language=SQL
@@ -26,38 +30,33 @@ public class CarsDaoJdbcImpl implements CarsDao {
         this.connection = connection;
     }
 
-    public void find(int id) {
+    public Cars find(int id) {
         try {
-            Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM auto");
-            while (result.next()) {
-                int autoId = result.getInt("auto_id");
-                if (autoId == id) {
-                    System.out.println(result.getString("auto_name"));
-                    break;
-                }
-            }
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CARS);
+            preparedStatement.setInt(1, id);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+
+            Cars cars = new Cars(result.getInt("auto_id"), result.getString("auto_name"), result.getInt("mileage"));
+            return cars;
+
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new IllegalArgumentException();
         }
     }
 
     public List getAll() {
         try {
-            ArrayList cars = new ArrayList();
+            List<Cars> cars = new ArrayList<Cars>();
             Statement statement = ConnectSupportFactory.getInstance().getConnection().createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM auto ");
+            ResultSet result = statement.executeQuery(SQL_GET_ALL);
             while (result.next()) {
-                int autoId = result.getInt("auto_id");
-                String autoName = result.getString("auto_name");
-                int mileage = result.getInt("mileage");
-                System.out.println("id - " + autoId + ", name - " + autoName + ", mileage - " + mileage);
-                cars.add("id - " + autoId + ", name - " + autoName + ", mileage - " + mileage);
+                Cars car = new Cars(result.getInt("auto_id"), result.getString("auto_name"), result.getInt("mileage"));
+                cars.add(car);
             }
             return cars;
         } catch (SQLException e) {
-            System.out.println(e);
-            return null;
+            throw new IllegalArgumentException();
         }
     }
 

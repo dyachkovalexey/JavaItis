@@ -4,11 +4,10 @@ import dao.CarsDao;
 import dao.CarsDaoJdbcImpl;
 import models.Cars;
 
+import java.util.List;
+
 import static utils.Verifier.verifyCarExist;
 
-/**
- * Created by KFU-user on 13.10.2016.
- */
 public class CarsServiceImpl implements CarsService {
 
     private CarsDao carsDao;
@@ -17,8 +16,25 @@ public class CarsServiceImpl implements CarsService {
         this.carsDao = carsDao;
     }
 
+    public Cars findCarById(int id) {
+        return carsDao.find(id);
+    }
+
     public void updateCar(Cars cars) {
         verifyCarExist(cars.getCarId());
         this.carsDao.update(cars);
+    }
+
+    public List<Cars> getAll() {
+        return this.carsDao.getAll();
+    }
+
+    public void deleteCar(int id) {
+        verifyCarExist(id);
+        this.carsDao.delete(id);
+    }
+
+    public void addCar(Cars car) {
+        this.carsDao.add(car);
     }
 }

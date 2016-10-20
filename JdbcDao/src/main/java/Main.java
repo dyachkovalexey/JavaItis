@@ -18,7 +18,8 @@ public class Main {
         OwnersDao ownersDao = DaoSupportFactory.getInstance().getOwnersDao();
         CarsDao carsDao = DaoSupportFactory.getInstance().getCarsDao();
 
-        //ownersDao.find(1);
+
+        System.out.println(ownersDao.find(1).toString());
         //ownersDao.getAll();
         //System.out.println();
         //carsDao.getAll();

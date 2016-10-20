@@ -4,6 +4,7 @@ import dao.CarsDao;
 import dao.CarsDaoJdbcImpl;
 import factorys.ConnectSupportFactory;
 import factorys.DaoSupportFactory;
+import models.Cars;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +18,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Lo0ny on 19.10.2016.
- */
 public class CarsServlet extends HttpServlet {
 
     private CarsDao carsDao;
@@ -35,11 +33,11 @@ public class CarsServlet extends HttpServlet {
                       HttpServletResponse response) {
 
         response.setContentType("text/html; charset=UTF-8");
-        List<String> result = carsDao.getAll();
+        List<Cars> result = carsDao.getAll();
         try {
             PrintWriter out = response.getWriter();
             out.println("<h1>Список автомобилей:</h1>");
-            for (String cars: result)
+            for (Cars cars: result)
                 out.println("<p>" + cars + "</p>");
         } catch (IOException e) {
             System.out.println(e);

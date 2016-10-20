@@ -1,5 +1,7 @@
 package models;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Created by KFU-user on 12.10.2016.
  */
@@ -32,5 +34,15 @@ public class Owners {
 
     public String getOwnerCity() {
         return ownerCity;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("ID", this.getOwnerId())
+                .add("FIO", this.getFIO())
+                .add("Age", this.getOwnerAge())
+                .add("City", this.getOwnerCity())
+                .toString();
     }
 }

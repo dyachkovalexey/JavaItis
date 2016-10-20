@@ -2,18 +2,16 @@ package servlets;
 
 import dao.OwnersDao;
 import factorys.DaoSupportFactory;
+import models.Owners;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.List;
 
-/**
- * Created by Lo0ny on 19.10.2016.
- */
 public class OwnersServlet extends HttpServlet{
 
     private OwnersDao ownersDao;
@@ -26,17 +24,13 @@ public class OwnersServlet extends HttpServlet{
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) {
-        response.setContentType("text/html; charset=UTF-8");
-
-        List<String> result = ownersDao.getAll();
         try {
-            PrintWriter out = null;
-            out = response.getWriter();
-            out.println("<h1>Список пользователей:</h1>");
-            /*for (String owners: result)
-                out.println("<p>" + owners + "</p>");*/
-            request.setAttribute("owners", result);
-            getServletContext().getRequestDispatcher("owners.jsp").forward(request, response);
+            response.setContentType("text/html; charset=UTF-8");
+
+            List<Owners> owners = ownersDao.getAll();
+            request.setAttribute("CarOwners", owners);
+
+            getServletContext().getRequestDispatcher("/owners.jsp").forward(request, response);
         } catch (IOException e) {
             System.out.println(e);
         } catch (ServletException e) {
@@ -45,4 +39,38 @@ public class OwnersServlet extends HttpServlet{
 
     }
 
+    @Override
+    public void doPost(HttpServletRequest request,
+                          HttpServletResponse response) {
+        try {
+
+            response.setContentType("text/html; charset=UTF-8");
+            Enumeration ownerEnum = request.getParameterNames();
+            String[] count = new String[4];
+            int i = 0;
+
+            while(ownerEnum.hasMoreElements())
+            {
+                String[] values = request.getParameterValues((String)ownerEnum.nextElement());
+                count[i] = values[0];
+                i++;
+            }
+
+            Owners owner = new Owners(Integer.parseInt(count[0]), count[1], Integer.parseInt(count[2]), count[3]);
+
+            if (owner != null) {
+                ownersDao.add(owner);
+            } else {
+                request.setAttribute("error", "Unknown user, please try again");
+                request.getRequestDispatcher("/owners.jsp").forward(request, response);
+            }
+            doGet(request,response);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        } catch (ServletException e) {
+            throw new IllegalArgumentException();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

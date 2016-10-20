@@ -21,7 +21,8 @@ public class ConnectSupportFactory {
     private ConnectSupportFactory() {
         try {
             properties = new Properties();
-            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
+            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
+            //properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\SQL.properties"));
 
             Class.forName(properties.getProperty("jdbc.driver"));
             this.connection = null;

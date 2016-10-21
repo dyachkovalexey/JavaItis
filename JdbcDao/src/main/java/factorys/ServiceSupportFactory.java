@@ -28,8 +28,8 @@ public class ServiceSupportFactory {
     private ServiceSupportFactory() {
         this.properties = new Properties();
         try {
-            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\service.properties"));
-            //properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\service.properties"));
+            //properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\service.properties"));
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\service.properties"));
 
             String carsServiceClassName = properties.getProperty("carsimpl.class");
             String ownersServiceClassName = properties.getProperty("ownersimpl.class");

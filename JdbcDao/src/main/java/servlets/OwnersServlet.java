@@ -45,7 +45,9 @@ public class OwnersServlet extends HttpServlet{
         try {
 
             response.setContentType("text/html; charset=UTF-8");
-            Enumeration ownerEnum = request.getParameterNames();
+            request.setCharacterEncoding("UTF-8");
+
+            /*Enumeration ownerEnum = request.getParameterNames();
             String[] count = new String[4];
             int i = 0;
 
@@ -56,7 +58,14 @@ public class OwnersServlet extends HttpServlet{
                 i++;
             }
 
-            Owners owner = new Owners(Integer.parseInt(count[0]), count[1], Integer.parseInt(count[2]), count[3]);
+            Owners owner = new Owners(Integer.parseInt(count[0]), count[1], Integer.parseInt(count[2]), count[3]);*/
+
+            String ownerName = request.getParameter("ownerName");
+            int ownerAge = Integer.parseInt(request.getParameter("ownerAge"));
+            String ownerCity = request.getParameter("ownerCity");
+
+            Owners owner = new Owners(ownerName, ownerAge, ownerCity);
+
 
             if (owner != null) {
                 ownersDao.add(owner);

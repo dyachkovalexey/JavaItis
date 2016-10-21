@@ -25,8 +25,8 @@ public class DaoSupportFactory {
         this.properties = new Properties();
 
         try {
-            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\dao.properties"));
-            //properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\dao.properties"));
+            //properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\dao.properties"));
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\JdbcDao\\src\\main\\resources\\dao.properties"));
 
             String carsDaoClassName = properties.getProperty("carsdao.class");
             String ownersDaoClassName = properties.getProperty("ownersdao.class");

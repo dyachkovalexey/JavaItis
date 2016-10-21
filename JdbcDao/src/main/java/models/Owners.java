@@ -20,9 +20,13 @@ public class Owners {
         this.ownerCity = ownerCity;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public Owners(String FIO, int ownerAge, String ownerCity) {
+        this.FIO = FIO;
+        this.ownerAge = ownerAge;
+        this.ownerCity = ownerCity;
     }
+
+    public int getOwnerId() { return ownerId; }
 
     public String getFIO() {
         return FIO;

@@ -24,8 +24,8 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
     // language=SQL
     private static final String SQL_UPDATE_DB = "UPDATE car_owner SET owner_age = ? WHERE owner_id = ?";
     // language=SQL
-    private static final String SQL_ADD_TO_DB = "INSERT INTO car_owner (owner_id, fio, owner_age, owner_city) VALUES" +
-            " (?, ?, ?, ?)";
+    private static final String SQL_ADD_TO_DB = "INSERT INTO car_owner (fio, owner_age, owner_city) VALUES" +
+            " (?, ?, ?)";
 
     public OwnersDaoJdbcImpl(Connection connection) {
         this.connection = connection;
@@ -88,10 +88,10 @@ public class OwnersDaoJdbcImpl implements OwnersDao {
     public void add(Owners owners) {
         try {
             PreparedStatement statement = connection.prepareStatement(SQL_ADD_TO_DB);
-            statement.setInt(1, owners.getOwnerId());
-            statement.setString(2, owners.getFIO());
-            statement.setInt(3, owners.getOwnerAge());
-            statement.setString(4, owners.getOwnerCity());
+            statement.setString(1, owners.getFIO());
+            statement.setInt(2, owners.getOwnerAge());
+            statement.setString(3, owners.getOwnerCity());
+
             statement.execute();
         } catch (SQLException e) {
             System.out.println(e);

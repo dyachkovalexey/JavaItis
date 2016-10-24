@@ -1,20 +1,18 @@
 ﻿CREATE TABLE auto (
-	auto_id integer NOT NULL,
+	auto_id SERIAL PRIMARY KEY NOT NULL,
 	auto_name character varying(40) NOT NULL,
-	mileage integer NOT NULL,
-	PRIMARY KEY(auto_id)	
+	auto_number character varying(40) NOT NULL	
 );
 
-CREATE TABLE car_owner (
-	owner_id integer NOT NULL,
-	FIO character varying(100) NOT NULL,
-	owner_age integer NOT NULL,
-	owner_city character varying(20) NOT NULL,
-	PRIMARY KEY(owner_id)
+CREATE TABLE users (
+	user_id SERIAL PRIMARY KEY NOT NULL,
+	user_name character varying(50) NOT NULL,
+	user_login character varying(50) NOT NULL,
+	user_password integer NOT NULL,
+	user_token character varying(100) NOT NULL
 );
 
-CREATE TABLE auto_car_owner (
-	auto_id integer NOT NULL,
-	owner_id integer NOT NULL,
-	PRIMARY KEY(owner_id, auto_id)
+CREATE TABLE auto_user (
+	user_id SERIAL PRIMARY KEY NOT NULL,
+	auto_id integer NOT NULL
 );

@@ -43,20 +43,27 @@ public class LoginServlet extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        String token = null;
 
         String login = request.getParameter("userLogin");
         int password = request.getParameter("password").hashCode();
 
         Users users = userDao.find(login);
 
-        if (users.getUserPassword() == password) {
-            String token = nextSessionId();
-            Cookie cookie = new Cookie("token", token);
-            cookie.setMaxAge(5 * 60); // пять минут
-            response.addCookie(cookie);
-            userDao.update(token, users.getUserId());
+        if (users != null) {
+            if (users.getUserPassword() == password) {
+                token = nextSessionId();
+                Cookie cookie = new Cookie("token", token);
+                cookie.setMaxAge(5 * 60); // пять минут
+                response.addCookie(cookie);
+                userDao.update(token, users.getUserId());
+            }
+        }
+
+        if (token == null) {
+            response.sendRedirect("/login");
         } else {
-            request.setAttribute("Error", password);
+            response.sendRedirect("/list");
         }
     }
 }

@@ -11,7 +11,7 @@
 <form action="addAuto" method="post">
     Name: <input type="name" name="autoName"> <br>
     Number: <input type="text" name="autoNumber"> <br>
-    <input type="submit" value="Add">
+    <input type="submit" value="Add" onclick="window.location='/list'">
     <span class="error">${error}</span>
 </form>
 </body>

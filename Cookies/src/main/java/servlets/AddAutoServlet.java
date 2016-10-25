@@ -55,5 +55,6 @@ public class AddAutoServlet extends HttpServlet {
         Autos autos = new Autos(autoName, number, id);
 
         autoDao.add(autos);
+        response.sendRedirect("/list");
     }
 }

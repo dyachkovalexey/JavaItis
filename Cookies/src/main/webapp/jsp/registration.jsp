@@ -12,7 +12,7 @@
     Name: <input type="text" name="userName"> <br>
     login: <input type="text" name="userLogin"> <br>
     password: <input type="password" name="password"> <br>
-    <input type="submit" value="Registration">
+    <input type="button" value="Registration" onclick="window.location='/login'">
     <span class="error">${error}</span>
 </form>
 </body>

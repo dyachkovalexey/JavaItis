@@ -21,6 +21,7 @@ public class LogFilter implements Filter {
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain){
         try {
+            servletResponse.setContentType("text/html; charset=UTF-8");
             Cookie cookie[] = ((HttpServletRequest) servletRequest).getCookies();
             if (cookie != null) {
                 for (int i = cookie.length-1; i > 0; i--) {
@@ -34,6 +35,7 @@ public class LogFilter implements Filter {
                         }
                     }
                 }
+                servletResponse.getWriter().println("Нет доступа к странице, пожалуйста, авторизуйтесь");
             }
         } catch (IOException e) {
             System.out.println(e);

@@ -11,16 +11,20 @@
 <p>
     <c:forEach items="${requestScope.Users}" var="currentUsers">
         <tr>
-            <td><c:out value="${currentUsers}" /><td>
-            <br>
-        </tr>
-    </c:forEach>
-    <c:forEach items="${requestScope.Autos}" var="currentAutos">
-        <tr>
-            <td><c:out value="${currentAutos}" /><td>
-            <br>
-        </tr>
+            ID: <td><c:out value="${currentUsers.userId}" /></td>
+            Name: <td><c:out value="${currentUsers.userName}" /></td>
+            <c:forEach items="${requestScope.Autos}" var="currentAutos">
+                <c:if test="${currentUsers.userId == currentAutos.userId}">
+                    Mark: <td><c:out value="${currentAutos.autoName}" /></td>
+                    Number: <td><c:out value="${currentAutos.autoNumber}" /></td>
+                    <br>
+                    </tr>
+                </c:if>
+            </c:forEach>
     </c:forEach>
 </p>
+<form>
+    <input type="button" value="addAuto" onclick="window.location='/addAuto'">
+</form>
 </body>
 </html>

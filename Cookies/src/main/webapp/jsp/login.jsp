@@ -15,7 +15,7 @@
 <form action="login" method="post">
     Login: <input type="login" name="userLogin">
     password: <input type="password" name="password">
-    <input type="submit" value="Check">
+    <input type="submit" value="Check" onclick="window.location='/list'">
     <span class="error">${error}</span>
 </form>
 </body>

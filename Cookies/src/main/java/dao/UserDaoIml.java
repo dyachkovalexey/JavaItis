@@ -41,7 +41,7 @@ public class UserDaoIml implements UserDao {
             }
             return users;
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e + " getAllUsers");
             return null;
         }
     }
@@ -86,7 +86,7 @@ public class UserDaoIml implements UserDao {
                     resultSet.getString("user_token"));
             return users;
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e + " findlogin");
             return null;
         }
     }
@@ -98,14 +98,13 @@ public class UserDaoIml implements UserDao {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            System.out.println();
 
             Users user = new Users(resultSet.getInt("user_id"), resultSet.getString("user_name"),
                     resultSet.getString("user_login"), resultSet.getInt("user_password"),
                     resultSet.getString("user_token"));
             return user;
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e + " findtoken");
             return null;
         }
     }

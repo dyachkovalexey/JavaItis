@@ -40,4 +40,8 @@ public class ListServlet extends HttpServlet{
         getServletContext().getRequestDispatcher("/jsp/list.jsp").forward(request, response);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("/addAuto");
+    }
 }

@@ -40,15 +40,14 @@ public class RegistrationServlet extends HttpServlet {
             response.setContentType("text/html; charset=UTF-8");
             request.setCharacterEncoding("UTF-8");
 
-            String userName = request.getParameter("userName");
-            String login = request.getParameter("userLogin");
-            String password = request.getParameter("password");
+                String userName =  request.getParameter("userName");
+                String login = request.getParameter("userLogin");
+                String password = request.getParameter("password");
 
+                Users users = new Users(userName, login, password.hashCode());
 
-            Users users = new Users(userName, login, password.hashCode());
-
-            userDao.registration(users);
-            getServletContext().getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                userDao.registration(users);
+                getServletContext().getRequestDispatcher("/jsp/login.jsp").forward(request, response);
 
     }
 }

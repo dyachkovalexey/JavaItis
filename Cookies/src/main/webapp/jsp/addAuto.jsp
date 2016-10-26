@@ -8,10 +8,11 @@
 <h1>
     Добавление автомобиля
 </h1>
-<form action="addAuto" method="post">
-    Name: <input type="name" name="autoName"> <br>
-    Number: <input type="text" name="autoNumber"> <br>
-    <input type="submit" value="Add" onclick="window.location='/list'">
+<script src="js/fields.js"></script>
+<form action="addAuto" method="post" name="Form" onsubmit="return validateForm()">
+    Name: <textarea cols="30" rows="2" name="autoName" id="a"></textarea>
+    Number: <textarea cols="30" rows="2" name="autoNumber" id="b"></textarea>
+    <input type="submit" value="AddAuto">
     <span class="error">${error}</span>
 </form>
 </body>

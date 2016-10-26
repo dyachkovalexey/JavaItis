@@ -23,7 +23,7 @@ public class DaoFactory {
         try {
             this.properties = new Properties();
 
-            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\Cookies\\src\\main\\resources\\dao.properties"));
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\Cookies\\src\\main\\resources\\dao.properties"));
 
             String autoDaoName = properties.getProperty("autodao.class");
             String userDaoName = properties.getProperty("userdao.class");

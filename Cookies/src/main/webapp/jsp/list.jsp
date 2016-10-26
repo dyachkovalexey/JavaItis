@@ -17,10 +17,10 @@
                 <c:if test="${currentUsers.userId == currentAutos.userId}">
                     Mark: <td><c:out value="${currentAutos.autoName}" /></td>
                     Number: <td><c:out value="${currentAutos.autoNumber}" /></td>
-                    <br>
                     </tr>
                 </c:if>
             </c:forEach>
+            <br>
     </c:forEach>
 </p>
 <form>

@@ -21,7 +21,7 @@ public class ConnectionFactory {
         try {
             properties = new Properties();
 
-            properties.load(new FileInputStream("C:\\Users\\Lo0ny\\Desktop\\JavaItis\\Cookies\\src\\main\\resources\\SQL.properties"));
+            properties.load(new FileInputStream("C:\\Users\\KFU-user\\Desktop\\JavaItis\\Cookies\\src\\main\\resources\\SQL.properties"));
 
             Class.forName(properties.getProperty("jdbc.driver"));
             this.connection = DriverManager.getConnection(properties.getProperty("jdbc.URL"),

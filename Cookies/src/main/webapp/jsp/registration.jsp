@@ -3,16 +3,19 @@
 <html>
 <head>
     <title>Registration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=unicode"/>
+    <meta content="CoffeeCup HTML Editor (www.coffeecup.com)" name="generator"/>
 </head>
 <body>
 <h1>
     Окно регистрации
 </h1>
-<form action="registration" method="post">
-    Name: <input type="text" name="userName"> <br>
-    login: <input type="text" name="userLogin"> <br>
-    password: <input type="password" name="password"> <br>
-    <input type="button" value="Registration" onclick="window.location='/login'">
+<script src='js/fields.js'></script>
+<form action="registration" method="post" name="Form" onsubmit="return validateForm()">
+    Name: <textarea cols="30" rows="2" name="userName" id="a"></textarea>
+    Login: <textarea cols="30" rows="2" name="userLogin" id="b"></textarea>
+    Password: <textarea cols="30" rows="2" name="password" id="c"></textarea>
+    <input type="submit" value="Registration" id="d" onclick="window.location='/login'">
     <span class="error">${error}</span>
 </form>
 </body>

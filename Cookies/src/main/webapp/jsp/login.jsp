@@ -3,6 +3,8 @@
 <html>
 <head>
     <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=unicode"/>
+    <meta content="CoffeeCup HTML Editor (www.coffeecup.com)" name="generator"/>
 </head>
 <body>
 <h1>
@@ -12,9 +14,10 @@
         response.addCookie(new Cookie("user-password", "user"));
     %>
 </h1>
-<form action="login" method="post">
-    Login: <input type="login" name="userLogin">
-    password: <input type="password" name="password">
+<script src='js/fields.js'></script>
+<form action="login" method="post" name="Form" onsubmit="return validateForm()">
+    Login: <textarea cols="30" rows="2" name="userLogin" id="b"></textarea>
+    password: <textarea cols="30" rows="2" name="password" id="c"></textarea>
     <input type="submit" value="Check" onclick="window.location='/list'">
     <span class="error">${error}</span>
 </form>

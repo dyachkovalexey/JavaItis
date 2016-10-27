@@ -1,6 +1,4 @@
-import dao.UserDao;
-import factorys.DaoFactory;
-import models.Users;
+package ru.itis;
 
 /**
  * Created by Lo0ny on 21.10.2016.

@@ -1,10 +1,12 @@
-package servlets;
+package ru.itis.servlets;
 
-import dao.AutoDao;
-import dao.UserDao;
-import factorys.DaoFactory;
-import models.Autos;
-import models.Users;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.itis.dao.AutoDao;
+import ru.itis.dao.UserDao;
+import ru.itis.factorys.DaoFactory;
+import ru.itis.models.Autos;
+import ru.itis.models.Users;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +26,9 @@ public class ListServlet extends HttpServlet{
     @Override
     public void init() throws ServletException {
         super.init();
-        userDao = DaoFactory.getInstance().getOwnersDao();
-        autoDao = DaoFactory.getInstance().getAutoDao();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
+        this.userDao = (UserDao)applicationContext.getBean("userDao");
+        this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
     }
 
     @Override

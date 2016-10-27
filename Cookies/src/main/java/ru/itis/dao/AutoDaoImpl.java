@@ -1,7 +1,8 @@
-package dao;
+package ru.itis.dao;
 
-import models.Autos;
+import ru.itis.models.Autos;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by Lo0ny on 21.10.2016.
  */
-public class AutoDaoIml implements  AutoDao {
+public class AutoDaoImpl implements  AutoDao {
 
     private Connection connection;
 
@@ -21,8 +22,16 @@ public class AutoDaoIml implements  AutoDao {
     //language=SQL
     public static final String SQL_FIND = "SELECT * FROM auto WHERE auto_id=?";
 
-    public AutoDaoIml(Connection connection) {
-        this.connection = connection;
+    public AutoDaoImpl() {
+
+    }
+
+    public AutoDaoImpl(DataSource dataSource) {
+        try {
+            this.connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     public List<Autos> getAll() {

@@ -1,10 +1,12 @@
-package servlets;
+package ru.itis.servlets;
 
-import dao.AutoDao;
-import dao.UserDao;
-import factorys.DaoFactory;
-import models.Autos;
-import models.Users;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.itis.dao.AutoDao;
+import ru.itis.dao.UserDao;
+import ru.itis.factorys.DaoFactory;
+import ru.itis.models.Autos;
+import ru.itis.models.Users;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -12,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Lo0ny on 21.10.2016.
@@ -25,8 +26,9 @@ public class AddAutoServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        autoDao = DaoFactory.getInstance().getAutoDao();
-        userDao = DaoFactory.getInstance().getOwnersDao();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
+        this.userDao = (UserDao)applicationContext.getBean("userDao");
+        this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
     }
 
     @Override

@@ -1,14 +1,17 @@
-package dao;
+package ru.itis.dao;
 
-import models.Users;
+import ru.itis.models.Users;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoIml implements UserDao {
+@Transactional
+@Repository
+public class UserDaoImpl implements UserDao {
 
     private Connection connection;
 
@@ -24,13 +27,20 @@ public class UserDaoIml implements UserDao {
     //language=SQL
     private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = ? WHERE user_id=?;";
 
+    public UserDaoImpl(DataSource dataSource) {
+        try {
+            this.connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 
-    public UserDaoIml(Connection connection) {
-        this.connection = connection;
+    public UserDaoImpl() {
     }
 
     public List<Users> getAll() {
         try {
+
             List<Users> users = new ArrayList<Users>();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SQL_GET_ALL);

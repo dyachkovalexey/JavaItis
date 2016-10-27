@@ -1,9 +1,11 @@
-package servlets;
+package ru.itis.servlets;
 
-import dao.UserDao;
-import factorys.DaoFactory;
-import models.Users;
+import ru.itis.dao.UserDao;
+import ru.itis.models.Users;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -24,9 +26,10 @@ public class LoginServlet extends HttpServlet{
     private SecureRandom random = new SecureRandom();
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        userDao = DaoFactory.getInstance().getOwnersDao();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
+        this.userDao = (UserDao)applicationContext.getBean("userDao");
     }
 
     public String nextSessionId() {

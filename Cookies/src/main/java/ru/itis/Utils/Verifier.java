@@ -1,4 +1,4 @@
-package Utils;
+package ru.itis.Utils;
 
 /**
  * Created by Lo0ny on 21.10.2016.

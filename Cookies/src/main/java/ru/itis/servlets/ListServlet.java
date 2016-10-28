@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.itis.dao.AutoDao;
 import ru.itis.dao.UserDao;
-import ru.itis.factorys.DaoFactory;
 import ru.itis.models.Autos;
 import ru.itis.models.Users;
 
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Lo0ny on 21.10.2016.
@@ -22,13 +22,16 @@ public class ListServlet extends HttpServlet{
 
     private UserDao userDao;
     private AutoDao autoDao;
+    private static Logger logger = Logger.getLogger(ListServlet.class.getName());
 
     @Override
     public void init() throws ServletException {
         super.init();
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
         this.userDao = (UserDao)applicationContext.getBean("userDao");
+        logger.info("userDao ListServlet initiation");
         this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
+        logger.info("autoDao ListServlet initiation");
     }
 
     @Override

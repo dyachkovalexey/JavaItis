@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.logging.Logger;
 
 /**
  * Created by Lo0ny on 21.10.2016.
@@ -24,12 +25,14 @@ public class LoginServlet extends HttpServlet{
 
     private UserDao userDao;
     private SecureRandom random = new SecureRandom();
+    private  static Logger logger = Logger.getLogger(LoginServlet.class.getName());
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
         this.userDao = (UserDao)applicationContext.getBean("userDao");
+        logger.info("userDao LoginServlet initiation");
     }
 
     public String nextSessionId() {

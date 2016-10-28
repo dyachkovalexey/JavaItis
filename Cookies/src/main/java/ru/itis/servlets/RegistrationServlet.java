@@ -3,7 +3,6 @@ package ru.itis.servlets;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.itis.dao.UserDao;
-import ru.itis.factorys.DaoFactory;
 import ru.itis.models.Users;
 
 import javax.servlet.ServletException;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created by Lo0ny on 21.10.2016.
@@ -18,6 +18,7 @@ import java.io.IOException;
 public class RegistrationServlet extends HttpServlet {
 
     private UserDao userDao;
+    private static Logger log = Logger.getLogger(RegistrationServlet.class.getName());
 
 
     @Override
@@ -25,6 +26,7 @@ public class RegistrationServlet extends HttpServlet {
         super.init();
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
         this.userDao = (UserDao)applicationContext.getBean("userDao");
+        log.info("userDao RegistrationServlet initiation");
     }
 
 

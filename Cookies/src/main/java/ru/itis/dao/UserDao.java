@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface UserDao {
     List<Users> getAll();
-    String registration(Users users);
+    void registration(Users users);
     Users find(String login);
     Users findByToken(String token);
     void update(String token, int id);

@@ -1,11 +1,16 @@
 package ru.itis.dao;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import ru.itis.models.Autos;
+import ru.itis.utils.AutoMapper;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Lo0ny on 21.10.2016.
@@ -13,12 +18,13 @@ import java.util.List;
 public class AutoDaoImpl implements  AutoDao {
 
     private Connection connection;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
     public static final String SQL_GET_ALL = "SELECT * FROM auto";
     //language=SQL
     public static final String SQL_ADD = "INSERT INTO auto (auto_name, auto_number, user_id) VALUES " +
-            "(?,?,?)";
+            "(:autoName, :autoNumber, :userId)";
     //language=SQL
     public static final String SQL_FIND = "SELECT * FROM auto WHERE auto_id=?";
 
@@ -26,59 +32,31 @@ public class AutoDaoImpl implements  AutoDao {
 
     }
 
-    public AutoDaoImpl(DataSource dataSource) {
+    public AutoDaoImpl(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         try {
             this.connection = dataSource.getConnection();
+            this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
     public List<Autos> getAll() {
-        try {
-            List<Autos> autos = new ArrayList<Autos>();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_GET_ALL);
-            while (resultSet.next()) {
-                Autos auto = new Autos(resultSet.getInt("auto_id"), resultSet.getString("auto_name"),
-                        resultSet.getString("auto_number"), resultSet.getInt("user_id"));
-                autos.add(auto);
-            }
-            return autos;
-        } catch (SQLException e) {
-            System.out.println(e);
-            return null;
-        }
+        List autos = (List)namedParameterJdbcTemplate.query(SQL_GET_ALL, new AutoMapper());
+        return autos;
     }
 
     public void add(Autos autos) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD);
-            preparedStatement.setString(1, autos.getAutoName());
-            preparedStatement.setString(2, autos.getAutoNumber());
-            preparedStatement.setInt(3, autos.getUserId());
-
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+        Map map = new HashMap();
+        map.put("autoName", autos.getAutoName());
+        map.put("autoNumber", autos.getAutoNumber());
+        map.put("userId", autos.getUserId());
+        namedParameterJdbcTemplate.update(SQL_ADD, map);
     }
 
     public Autos find(int id) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND);
-            preparedStatement.setInt(1, id);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-            Autos autos = new Autos(resultSet.getInt("auto_id"), resultSet.getString("auto_name"),
-                    resultSet.getString("auto_number"), resultSet.getInt("user_id"));
-            return autos;
-        } catch (SQLException e) {
-            System.out.println(e);
-            return null;
-        }
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("autoId", id);
+        Autos autos = (Autos)namedParameterJdbcTemplate.queryForObject(SQL_FIND, sqlParameterSource, new AutoMapper());
+        return autos;
     }
 }

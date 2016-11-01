@@ -1,35 +1,45 @@
 package ru.itis.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import ru.itis.models.Users;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itis.utils.UsersMapper;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Repository
 public class UserDaoImpl implements UserDao {
 
     private Connection connection;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
     public static final String SQL_GET_ALL = "SELECT * FROM users";
     //language=SQL
     public static final String SQL_REGISTRATION = "INSERT INTO users (user_name, user_login, user_password, user_token) VALUES " +
-            "(?,?,?, ?)";
+            "(:userName, :userLogin, :userPassword, :userToken)";
     //language=SQL
-    public static final String SQL_FIND = "SELECT * FROM users WHERE user_login=?";
+    public static final String SQL_FIND = "SELECT * FROM users WHERE user_login=:userLogin";
     //language=SQL
-    public static final String SQL_FIND_BY_TOKEN = "SELECT * FROM users WHERE user_token=?";
+    public static final String SQL_FIND_BY_TOKEN = "SELECT * FROM users WHERE user_token=:userToken";
     //language=SQL
-    private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = ? WHERE user_id=?;";
+    private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = :userToken WHERE user_id=:userId;";
 
-    public UserDaoImpl(DataSource dataSource) {
+    public UserDaoImpl(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         try {
             this.connection = dataSource.getConnection();
+            this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -39,83 +49,38 @@ public class UserDaoImpl implements UserDao {
     }
 
     public List<Users> getAll() {
-        try {
-
-            List<Users> users = new ArrayList<Users>();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_GET_ALL);
-            while (resultSet.next()) {
-                Users user = new Users(resultSet.getInt("user_id"), resultSet.getString("user_name"),
-                        resultSet.getString("user_login"), resultSet.getInt("user_password"), resultSet.getString("user_token"));
-                users.add(user);
-            }
-            return users;
-        } catch (SQLException e) {
-            System.out.println(e + " getAllUsers");
-            return null;
-        }
+        List<Users> users = (List<Users>)namedParameterJdbcTemplate.query(SQL_GET_ALL, new UsersMapper());
+        return users;
     }
 
     public void update(String token, int id) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USERS);
-            preparedStatement.setString(1, token);
-            preparedStatement.setInt(2, id);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+        Map map = new HashMap();
+        map.put("userToken", token);
+        map.put("userId", id);
+        namedParameterJdbcTemplate.update(SQL_UPDATE_USERS, map);
     }
 
-    public String registration(Users users) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_REGISTRATION);
-            preparedStatement.setString(1, users.getUserName());
-            preparedStatement.setString(2, users.getUserLogin());
-            preparedStatement.setInt(3, users.getUserPassword());
-            preparedStatement.setString(4, "");
-            preparedStatement.execute();
 
-            return "Пользователь " + users.getUserName() + " успешно зарегестрирован!";
-        } catch (SQLException e) {
-            System.out.println(e);
-            return "Ошибка регистрации";
-        }
+    public void registration(Users users) {
+        Map map = new HashMap();
+        map.put("userName", users.getUserName());
+        map.put("userLogin", users.getUserLogin());
+        map.put("userPassword", users.getUserPassword());
+        map.put("userToken", "");
+        System.out.println(map.toString());
+        namedParameterJdbcTemplate.update(SQL_REGISTRATION, map);
     }
 
     public Users find(String login) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND);
-            preparedStatement.setString(1, login);
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userLogin", login);
+        Users users = (Users)namedParameterJdbcTemplate.queryForObject(SQL_FIND, sqlParameterSource, new UsersMapper());
+        return users;
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-            Users users = new Users(resultSet.getInt("user_id"), resultSet.getString("user_name"),
-                    resultSet.getString("user_login"), resultSet.getInt("user_password"),
-                    resultSet.getString("user_token"));
-            return users;
-        } catch (SQLException e) {
-            System.out.println(e + " findlogin");
-            return null;
-        }
     }
 
     public Users findByToken(String token) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_TOKEN);
-            preparedStatement.setString(1, token);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-            Users user = new Users(resultSet.getInt("user_id"), resultSet.getString("user_name"),
-                    resultSet.getString("user_login"), resultSet.getInt("user_password"),
-                    resultSet.getString("user_token"));
-            return user;
-        } catch (SQLException e) {
-            System.out.println(e + " findtoken");
-            return null;
-        }
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userToken", token);
+        Users users = (Users)namedParameterJdbcTemplate.queryForObject(SQL_FIND_BY_TOKEN, sqlParameterSource, new UsersMapper());
+        return users;
     }
 }

@@ -43,24 +43,26 @@ public class TestRestServlet extends HttpServlet {
         private List<Autos> autos;
 
 
-        public RestRequest(String pathInfo) {
+        public RestRequest(String pathInfo, int id) {
             Matcher matcher;
 
-            matcher = regExAllPattern.matcher(pathInfo);
+            matcher = regExAllAutosPattern.matcher(pathInfo);
             if (matcher.find()) {
-                this.users = userDao.getAll();
+                this.autos = autoDao.getAllByUserId(Integer.parseInt(matcher.group(1))); //TODO: here!!
+                System.out.println("hi!");
                 return;
             }
 
             matcher = regExUsersLoginPattern.matcher(pathInfo);
-            if (matcher.find()) {
-                this.user = userDao.findById(Integer.parseInt(matcher.group(1)));
+            if (matcher.find() || (id!=0)) {
+                System.out.println(id);
+                this.user = userDao.findById(id);
                 return;
             }
 
-            matcher = regExAllAutosPattern.matcher(pathInfo);
+            matcher = regExAllPattern.matcher(pathInfo);
             if (matcher.find()) {
-                this.autos = autoDao.getAllByUserId(Integer.parseInt(matcher.group(1)));
+                this.users = userDao.getAll();
                 return;
             }
             }
@@ -82,12 +84,19 @@ public class TestRestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter printWriter = response.getWriter();
+        int id;
 
         printWriter.println(request.getPathInfo());
-        printWriter.println(request.getParameterMap());
-        RestRequest restRequest = new RestRequest(request.getPathInfo());
-        if (request.getParameter("id")!=null)
-            printWriter.println();
+        try {
+            if (request.getParameter("id")==null) {id=0;} else {id = Integer.parseInt(request.getParameter("id"));}
+        } catch (NullPointerException e) {
+            id = 0;
+            System.out.println(e);
+        }
+
+
+        RestRequest restRequest = new RestRequest(request.getPathInfo(), id);
+        System.out.println(restRequest.getAutos().toString());
         if (restRequest.getUser()!=null)
             printWriter.println(restRequest.getUser().toString());
         if (restRequest.getAutos()!=null)

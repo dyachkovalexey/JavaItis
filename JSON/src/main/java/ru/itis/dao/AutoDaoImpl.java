@@ -6,8 +6,11 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import ru.itis.models.Autos;
 import ru.itis.utils.AutoMapper;
 
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +67,9 @@ public class AutoDaoImpl implements  AutoDao {
         return autos;
     }
 
-    public List<Autos> getAllByUserId(int userId) {
+    public List<Autos> getAllByUserId(int userId){
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userId", userId);
-        List autos = (List)namedParameterJdbcTemplate.queryForObject(SQL_GET_ALL_BY_USERID, sqlParameterSource, new AutoMapper());
+        List autos = namedParameterJdbcTemplate.query(SQL_GET_ALL_BY_USERID, sqlParameterSource, new AutoMapper());
         return autos;
     }
 }

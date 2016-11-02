@@ -48,8 +48,7 @@ public class TestRestServlet extends HttpServlet {
 
             matcher = regExAllAutosPattern.matcher(pathInfo);
             if (matcher.find()) {
-                this.autos = autoDao.getAllByUserId(Integer.parseInt(matcher.group(1))); //TODO: here!!
-                System.out.println("hi!");
+                this.autos = autoDao.getAllByUserId(Integer.parseInt(matcher.group(1)));
                 return;
             }
 
@@ -68,9 +67,7 @@ public class TestRestServlet extends HttpServlet {
             }
 
 
-        public List<Users> getUsers() {
-            return users;
-        }
+        public List<Users> getUsers() { return users; }
 
         public Users getUser() {
             return user;
@@ -83,6 +80,7 @@ public class TestRestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=UTF-8");
         PrintWriter printWriter = response.getWriter();
         int id;
 
@@ -94,16 +92,20 @@ public class TestRestServlet extends HttpServlet {
             System.out.println(e);
         }
 
-
         RestRequest restRequest = new RestRequest(request.getPathInfo(), id);
-        System.out.println(restRequest.getAutos().toString());
-        if (restRequest.getUser()!=null)
+        if (id!=0) {
             printWriter.println(restRequest.getUser().toString());
-        if (restRequest.getAutos()!=null)
+        }
+        try {
             printWriter.println(restRequest.getAutos().toString());
-        if (restRequest.getUsers()!=null)
+        } catch (NullPointerException e) {
+            System.out.println(e);
+        }
+        try {
             printWriter.println(restRequest.getUsers().toString());
-        response.setContentType("application/json");
+        } catch (NullPointerException e) {
+            System.out.println(e);
+        }
         printWriter.close();
     }
 

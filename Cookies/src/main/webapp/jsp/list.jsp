@@ -9,11 +9,11 @@
     Cписок владельцев авто:
 </h1>
 <p>
-    <c:forEach items="${requestScope.Users}" var="currentUsers">
+    <c:forEach items="${usersList}" var="currentUsers">
         <tr>
             ID: <td><c:out value="${currentUsers.userId}" /></td>
             Name: <td><c:out value="${currentUsers.userName}" /></td>
-            <c:forEach items="${requestScope.Autos}" var="currentAutos">
+            <c:forEach items="${autosList}" var="currentAutos">
                 <c:if test="${currentUsers.userId == currentAutos.userId}">
                     Mark: <td><c:out value="${currentAutos.autoName}" /></td>
                     Number: <td><c:out value="${currentAutos.autoNumber}" /></td>

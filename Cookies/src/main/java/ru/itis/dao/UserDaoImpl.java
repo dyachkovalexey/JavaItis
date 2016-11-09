@@ -19,7 +19,6 @@ import java.util.Map;
 @Service
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
@@ -34,6 +33,7 @@ public class UserDaoImpl implements UserDao {
     //language=SQL
     private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = :userToken WHERE user_id=:userId;";
 
+    @Autowired
     public UserDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }

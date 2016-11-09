@@ -1,7 +1,6 @@
 package ru.itis.controllers;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,15 +15,10 @@ import java.util.List;
 @Controller
 public class ListController{
 
+    @Autowired
     private UserDao userDao;
+    @Autowired
     private AutoDao autoDao;
-
-
-    public ListController() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
-        this.userDao = (UserDao)applicationContext.getBean("userDao");
-        this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
-    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView ShowUsers() throws Exception {

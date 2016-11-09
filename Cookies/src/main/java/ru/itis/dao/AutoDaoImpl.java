@@ -1,8 +1,11 @@
 package ru.itis.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ru.itis.models.Autos;
 import ru.itis.utils.AutoMapper;
 
@@ -12,9 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Lo0ny on 21.10.2016.
- */
+@Repository
+@Service
 public class AutoDaoImpl implements  AutoDao {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -31,12 +33,13 @@ public class AutoDaoImpl implements  AutoDao {
 
     }
 
+    @Autowired
     public AutoDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public List<Autos> getAll() {
-        List autos = (List)namedParameterJdbcTemplate.query(SQL_GET_ALL, new AutoMapper());
+        List autos = namedParameterJdbcTemplate.query(SQL_GET_ALL, new AutoMapper());
         return autos;
     }
 

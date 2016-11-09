@@ -12,7 +12,7 @@ import ru.itis.models.Users;
 @Controller
 public class RegistrationController {
 
-
+    @Autowired
     private UserDao userDao;
 
     @RequestMapping(value = "/registration")

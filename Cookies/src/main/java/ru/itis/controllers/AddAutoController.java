@@ -1,7 +1,6 @@
 package ru.itis.controllers;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +15,12 @@ import ru.itis.models.Users;
 @Controller
 public class AddAutoController{
 
+
+    @Autowired
     private AutoDao autoDao;
+    @Autowired
     private UserDao userDao;
 
-    public AddAutoController() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
-        this.userDao = (UserDao)applicationContext.getBean("userDao");
-        this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
-    }
 
     @RequestMapping(value = "/addAuto", method = RequestMethod.GET)
     public ModelAndView ShowFields() {
@@ -40,12 +37,9 @@ public class AddAutoController{
         Users users = userDao.findByToken(token);
         int id = users.getUserId();
         System.out.println(id);
-
-            Autos autos = new Autos(autoName, number, id);
-
-            autoDao.add(autos);
-
-            modelAndView.setViewName("list");
+        Autos autos = new Autos(autoName, number, id);
+        autoDao.add(autos);
+        modelAndView.setViewName("list");
         return modelAndView;
     }
 }

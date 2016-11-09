@@ -1,7 +1,6 @@
 package ru.itis.controllers;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,13 +17,10 @@ public class LoginController{
 
 
 
+    @Autowired
     private UserDao userDao;
     private SecureRandom random = new SecureRandom();
 
-    public LoginController() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
-        this.userDao = (UserDao)applicationContext.getBean("userDao");
-    }
 
     public String nextSessionId() {
         return new BigInteger(100, random).toString(32);

@@ -15,8 +15,6 @@ public class SpringCookieBeansListener implements ServletContextListener {
         System.out.println(applicationContext);
         applicationContext.getBean("LoginServlet");
         servletContextEvent.getServletContext().setAttribute("cookieBeans", applicationContext);
-
-
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

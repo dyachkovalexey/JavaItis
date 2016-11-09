@@ -4,23 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Service;
 import ru.itis.models.Users;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itis.utils.UsersMapper;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Transactional
 @Repository
+@Service
 public class UserDaoImpl implements UserDao {
 
-    private Connection connection;
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -36,13 +34,8 @@ public class UserDaoImpl implements UserDao {
     //language=SQL
     private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = :userToken WHERE user_id=:userId;";
 
-    public UserDaoImpl(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        try {
-            this.connection = dataSource.getConnection();
+    public UserDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
     }
 
     public UserDaoImpl() {

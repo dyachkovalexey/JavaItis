@@ -2,59 +2,50 @@ package ru.itis.controllers;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import ru.itis.dao.AutoDao;
 import ru.itis.dao.UserDao;
 import ru.itis.models.Autos;
 import ru.itis.models.Users;
-import ru.itis.servlets.AddAutoServlet;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.logging.Logger;
-
-public class AddAutoController implements Controller {
+@Controller
+public class AddAutoController{
 
     private AutoDao autoDao;
     private UserDao userDao;
-    private static Logger logger = Logger.getLogger(AddAutoServlet.class.getName());
 
     public AddAutoController() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
         this.userDao = (UserDao)applicationContext.getBean("userDao");
-        logger.info("userDao AddAutoServlet initiation");
         this.autoDao = (AutoDao)applicationContext.getBean("autoDao");
-        logger.info("autoDao AddAutoServlet initiation");
     }
-    public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
 
+    @RequestMapping(value = "/addAuto", method = RequestMethod.GET)
+    public ModelAndView ShowFields() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("addAuto");
+        return modelAndView;
+    }
 
-        if (httpServletRequest.getMethod().equals("GET")) {
-            modelAndView.setViewName("addAuto");
-        }
-        if (httpServletRequest.getMethod().equals("POST")) {
-            int id = 0;
-            Cookie cookie[] = httpServletRequest.getCookies();
-            for (int i = cookie.length - 1; i > 0; i--) {
-                Users users = userDao.findByToken(cookie[i].getValue());
-                if (users != null)
-                    if (cookie[i].getValue().equals(users.getUserToken())) {
-                        id = users.getUserId();
-                        break;
-                    }
-            }
+    @RequestMapping(value = "/addAuto", method = RequestMethod.POST)
+    public ModelAndView AddAuto(@RequestParam("autoName") String autoName,
+                                      @RequestParam("autoNumber") String number,
+                                      @CookieValue(value = "token", defaultValue = "0") String token) {
+        ModelAndView modelAndView = new ModelAndView();
+        Users users = userDao.findByToken(token);
+        int id = users.getUserId();
+        System.out.println(id);
 
-            String autoName = httpServletRequest.getParameter("autoName");
-            String number = httpServletRequest.getParameter("autoNumber");
             Autos autos = new Autos(autoName, number, id);
 
             autoDao.add(autos);
 
             modelAndView.setViewName("list");
-        }
         return modelAndView;
     }
 }

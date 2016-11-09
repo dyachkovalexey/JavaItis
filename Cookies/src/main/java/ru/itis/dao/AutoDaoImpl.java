@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class AutoDaoImpl implements  AutoDao {
 
-    private Connection connection;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
@@ -32,13 +31,8 @@ public class AutoDaoImpl implements  AutoDao {
 
     }
 
-    public AutoDaoImpl(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        try {
-            this.connection = dataSource.getConnection();
+    public AutoDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
             this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
     }
 
     public List<Autos> getAll() {
@@ -52,11 +46,5 @@ public class AutoDaoImpl implements  AutoDao {
         map.put("autoNumber", autos.getAutoNumber());
         map.put("userId", autos.getUserId());
         namedParameterJdbcTemplate.update(SQL_ADD, map);
-    }
-
-    public Autos find(int id) {
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("autoId", id);
-        Autos autos = (Autos)namedParameterJdbcTemplate.queryForObject(SQL_FIND, sqlParameterSource, new AutoMapper());
-        return autos;
     }
 }

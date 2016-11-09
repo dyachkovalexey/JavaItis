@@ -10,5 +10,4 @@ import java.util.List;
 public interface AutoDao {
     List<Autos> getAll();
     void add(Autos autos);
-    Autos find(int id);
 }

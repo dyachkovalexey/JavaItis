@@ -1,42 +1,41 @@
 package ru.itis.controllers;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import ru.itis.dao.UserDao;
 import ru.itis.models.Users;
-import ru.itis.servlets.RegistrationServlet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.logging.Logger;
+@Controller
+public class RegistrationController {
 
-public class RegistrationController implements Controller{
 
     private UserDao userDao;
-    private static Logger log = Logger.getLogger(RegistrationServlet.class.getName());
 
-    public RegistrationController() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
-        this.userDao = (UserDao)applicationContext.getBean("userDao");
-        log.info("userDao RegistrationServlet initiation");
+    @RequestMapping(value = "/registration")
+    public ModelAndView ShowPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("registration");
+        return modelAndView;
     }
 
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public ModelAndView RegistrationNewUser(@RequestParam("userName") String userName,
+                                            @RequestParam("userLogin") String login,
+                                            @RequestParam("password") String password) {
         ModelAndView modelAndView = new ModelAndView();
-        if (request.getMethod().equals("GET")) {
-            modelAndView.setViewName("registration");
-        }
-        if (request.getMethod().equals("POST")) {
-            String userName = request.getParameter("userName");
-            String login = request.getParameter("userLogin");
-            String password = request.getParameter("password");
-
+        Users user = null;
+        try {
+            user = userDao.find(login);
+        } catch (NullPointerException e) {}
+        if (user!=null) {
             Users users = new Users(userName, login, password.hashCode());
             userDao.registration(users);
             modelAndView.setViewName("login");
-        }
+        } else { modelAndView.setViewName("registration"); }
         return modelAndView;
     }
 }

@@ -21,8 +21,6 @@ import java.sql.SQLException;
 @ComponentScan("ru.itis")
 public class WebConfig extends WebMvcConfigurerAdapter{
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     @Bean
     public ViewResolver configureViewResolver() {
         InternalResourceViewResolver viewResolve = new InternalResourceViewResolver();
@@ -33,14 +31,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     }
 
     @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {
+    public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/CookieTest");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/Cookie");
         dataSource.setUsername("postgres");
         dataSource.setPassword("jie1995xa");
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        return namedParameterJdbcTemplate;
+        return dataSource;
     }
 
     @Override

@@ -34,8 +34,8 @@ public class AutoDaoImpl implements  AutoDao {
     }
 
     @Autowired
-    public AutoDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-            this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public AutoDaoImpl(DataSource dataSource) {
+            this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     public List<Autos> getAll() {

@@ -24,18 +24,14 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <filter>
+    <!--<filter>
         <filter-name>LogFilter</filter-name>
         <filter-class>ru.itis.filters.LogFilter</filter-class>
-        <init-param>
-            <param-name>message-param</param-name>
-            <param-value>FROM FILTER</param-value>
-        </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>LogFilter</filter-name>
         <url-pattern>/addAuto</url-pattern>
         <url-pattern>/list</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>

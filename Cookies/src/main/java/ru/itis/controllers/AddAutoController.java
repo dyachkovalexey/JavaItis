@@ -36,7 +36,6 @@ public class AddAutoController{
         ModelAndView modelAndView = new ModelAndView();
         Users users = userDao.findByToken(token);
         int id = users.getUserId();
-        System.out.println(id);
         Autos autos = new Autos(autoName, number, id);
         autoDao.add(autos);
         modelAndView.setViewName("list");

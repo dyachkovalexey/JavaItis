@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itis.utils.UsersMapper;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,8 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE_USERS = "UPDATE users SET user_token = :userToken WHERE user_id=:userId;";
 
     @Autowired
-    public UserDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-            this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public UserDaoImpl(DataSource dataSource) {
+            this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     public UserDaoImpl() {
@@ -72,6 +73,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public Users findByToken(String token) {
+        System.out.println(token);
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userToken", token);
         Users users = (Users)namedParameterJdbcTemplate.queryForObject(SQL_FIND_BY_TOKEN, sqlParameterSource, new UsersMapper());
         return users;

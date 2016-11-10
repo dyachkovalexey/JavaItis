@@ -2,9 +2,16 @@ package ru.itis.filters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.itis.configuration.WebConfig;
 import ru.itis.dao.UserDao;
+import ru.itis.dao.UserDaoImpl;
 import ru.itis.models.Users;
 
 import javax.servlet.*;
@@ -13,16 +20,18 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import static ru.itis.utils.Verifier.verifyUserExistByToken;
 
-@WebFilter
+
 public class LogFilter implements Filter {
 
-    @Autowired
+    private String messageParam;
+
+
     private UserDao userDao;
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("CookieBeans.xml");
-        this.userDao = (UserDao)applicationContext.getBean("userDao");
+        this.messageParam = filterConfig.getInitParameter("message-param");
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain){
@@ -32,8 +41,8 @@ public class LogFilter implements Filter {
             if (cookie != null) {
                 for (int i = cookie.length-1; i > 0; i--) {
                     try {
+                        System.out.println(cookie[i].getValue());
                         Users users = userDao.findByToken(cookie[i].getValue());
-
                     if (users != null) {
                         String token = users.getUserToken();
 
@@ -42,7 +51,9 @@ public class LogFilter implements Filter {
                             break;
                         }
                     }
-                    } catch (NullPointerException e) {}
+                    } catch (NullPointerException e) {
+                        System.out.println(e);
+                    }
                 }
                 servletResponse.getWriter().println("Нет доступа к странице, пожалуйста, авторизуйтесь");
             }

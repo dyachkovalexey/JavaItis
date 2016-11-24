@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,6 @@ import java.util.Map;
 
 @Transactional
 @Repository
-@Service
 public class MessagesDaoImpl implements  MessagesDao{
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -32,10 +33,10 @@ public class MessagesDaoImpl implements  MessagesDao{
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @Autowired
-    public MessagesDaoImpl() {
 
+    public MessagesDaoImpl() {
     }
+
     @Override
     public void add(MessageDto messageDto) {
         Map map = new HashMap();

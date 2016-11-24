@@ -1,6 +1,7 @@
-package ru.itis;
+package ru.itis.service;
 
 import org.springframework.stereotype.Service;
+import ru.itis.dto.MessageDto;
 
 import java.util.ArrayList;
 import java.util.List;

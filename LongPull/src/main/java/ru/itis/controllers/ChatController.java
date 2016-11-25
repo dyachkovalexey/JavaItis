@@ -1,10 +1,7 @@
 package ru.itis.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.itis.dao.ChatDao;
 import ru.itis.dao.UsersDao;
@@ -25,20 +22,19 @@ public class ChatController {
     private ChatService service;
 
     @RequestMapping(value = "/chat", method = RequestMethod.POST)
+    @ResponseBody
     public ModelAndView addChat(@RequestParam("chatId") int chatId, @RequestParam("chatName") String chatName) {
         ModelAndView modelAndView = new ModelAndView();
         Chat chat = chatDao.find(chatId);
-        modelAndView.setViewName("chat/");
+        int currentChatId = chat.getChatId();
+        chatDao.save(chat);
+        modelAndView.setViewName("chat/{currentChatId}");
         return modelAndView;
     }
 
     @RequestMapping(value ="/chat", method = RequestMethod.GET)
+    @ResponseBody
     public ModelAndView showAllChats() {
-        synchronized (service.getListChats()) {
-            while (service.getListChats().isEmpty()) {
-
-            }
-        }
         ModelAndView modelAndView = new ModelAndView();
         List<Chat> chatList = chatDao.findAll();
         modelAndView.addObject("chatList", chatList);
@@ -46,14 +42,17 @@ public class ChatController {
         return  modelAndView;
     }
 
-    @RequestMapping(value = "/chat/", method = RequestMethod.GET)
-    public ModelAndView showChat() {
+    @RequestMapping(value = "/chat/{chatId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView showChat(@PathVariable("chatId") int chatId) {
         ModelAndView modelAndView = new ModelAndView();
+        Chat chat = chatDao.find(chatId);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/chat/", method = RequestMethod.POST)
-    public ModelAndView addUsers() {
+    @RequestMapping(value = "/chat/{chatId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView addUsers(@PathVariable("chatId") int chatId) {
         ModelAndView modelAndView = new ModelAndView();
         return modelAndView;
     }

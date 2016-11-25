@@ -10,7 +10,9 @@ import ru.itis.models.Chat;
 import ru.itis.utils.ChatMapper;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Service
@@ -21,7 +23,7 @@ public class ChatDaoImpl implements  ChatDao {
     //language=SQL
     public static final String SQL_FIND_ALL = "SELECT * FROM chatsdb";
     //language=SQL
-    public static final String SQL_SAVE = "INSERT  INTO chatsdb (chat_name) VALUES (:chatName)";
+    public static final String SQL_SAVE = "INSERT  INTO chatsdb (chat_id ,chat_name) VALUES (:chatId, :chatName)";
     //language=SQL
     public static final String SQL_FIND = "SELECT * FROM chatsdb WHERE chat_id=:chatId";
 
@@ -47,8 +49,11 @@ public class ChatDaoImpl implements  ChatDao {
     }
 
     @Override
-    public int save(Chat chatDto) {
-        return 0;
+    public int save(Chat chat) {
+        Map map = new HashMap<>();
+        map.put("chatId", chat.getChatId());
+        map.put("chatName", chat.getChatName());
+
     }
 
     @Override

@@ -21,11 +21,15 @@ public class ChatDaoImpl implements  ChatDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
-    public static final String SQL_FIND_ALL = "SELECT * FROM chatsdb";
+    public static final String SQL_FIND_ALL = "SELECT * FROM chat";
     //language=SQL
-    public static final String SQL_SAVE = "INSERT  INTO chatsdb (chat_id ,chat_name) VALUES (:chatId, :chatName)";
+    public static final String SQL_SAVE = "INSERT INTO chat (chat_name, user_id) VALUES (:chatName, :userId)";
     //language=SQL
-    public static final String SQL_FIND = "SELECT * FROM chatsdb WHERE chat_id=:chatId";
+    public static final String SQL_FIND = "SELECT * FROM chat WHERE chat_id=:chatId";
+    //language=SQL
+    public static final String SQL_UPDATE_NAME = "UPDATE chat SET chat_name=:chatName WHERE chat_id=:chatId";
+    //language=SQL
+    public static final String SQL_FIND_USER_BY_TOKEN = "SELECT user_id FROM chat_auth WHERE token=:token";
 
     @Autowired
     public ChatDaoImpl(DataSource dataSource) {
@@ -37,7 +41,7 @@ public class ChatDaoImpl implements  ChatDao {
 
     @Override
     public List<Chat> findAll() {
-        List chat = namedParameterJdbcTemplate.query(SQL_FIND_ALL, new ChatMapper());
+        List<Chat> chat = namedParameterJdbcTemplate.query(SQL_FIND_ALL, new ChatMapper());
         return chat;
     }
 
@@ -49,15 +53,26 @@ public class ChatDaoImpl implements  ChatDao {
     }
 
     @Override
-    public int save(Chat chat) {
+    public void save(Chat chat) {
         Map map = new HashMap<>();
-        map.put("chatId", chat.getChatId());
         map.put("chatName", chat.getChatName());
-
+        map.put("userId", chat.getUserId());
+        namedParameterJdbcTemplate.update(SQL_SAVE, map);
     }
 
     @Override
-    public void update(Chat chatDto) {
+    public void update(Chat chat) {
+        Map map = new HashMap();
+        map.put("chatName", chat.getChatName());
+        map.put("chatId", chat.getChatName());
+        namedParameterJdbcTemplate.update(SQL_UPDATE_NAME, map);
+    }
 
+    @Override
+    public Integer findByToken(String token) {
+        Map map = new HashMap<>();
+        map.put("token", token);
+        Integer userId = namedParameterJdbcTemplate.update(SQL_FIND_USER_BY_TOKEN, map);
+        return userId;
     }
 }

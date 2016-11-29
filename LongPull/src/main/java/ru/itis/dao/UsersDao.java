@@ -9,7 +9,10 @@ import java.util.List;
 public interface UsersDao {
 
     List<Users> findAll();
-    Users find();
-    int save(Users usersDto);
-    void update(Users usersDto);
+    Users find(Integer id);
+    void save(Users users);
+    void update(Users user, String token);
+    void saveUserToChat(Integer userId, Integer chatId);
+    void addToken(Users user, String token);
+    Users findByLogin(String login);
 }

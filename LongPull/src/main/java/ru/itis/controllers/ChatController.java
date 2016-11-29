@@ -13,47 +13,27 @@ import java.util.List;
 @RestController
 public class ChatController {
 
-    @Autowired
-    private ChatDao chatDao;
-    @Autowired
-    private UsersDao usersDao;
 
     @Autowired
-    private ChatService service;
+    private ChatService chatService;
 
-    @RequestMapping(value = "/chat", method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView addChat(@RequestParam("chatId") int chatId, @RequestParam("chatName") String chatName) {
-        ModelAndView modelAndView = new ModelAndView();
-        Chat chat = chatDao.find(chatId);
-        int currentChatId = chat.getChatId();
-        chatDao.save(chat);
-        modelAndView.setViewName("chat/{currentChatId}");
-        return modelAndView;
+    @RequestMapping(value = "/chats", method = RequestMethod.POST)
+    public void addChat(@RequestBody String chatName, @RequestHeader String token) {
+        chatService.createNewChat(chatName, token);
     }
 
-    @RequestMapping(value ="/chat", method = RequestMethod.GET)
+    @RequestMapping(value ="/chats", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView showAllChats() {
-        ModelAndView modelAndView = new ModelAndView();
-        List<Chat> chatList = chatDao.findAll();
-        modelAndView.addObject("chatList", chatList);
-        modelAndView.setViewName("chat");
-        return  modelAndView;
+    public List<Chat> showAllChats() {
+        List<Chat> chats = chatService.showAllChats();
+        return chats;
     }
 
-    @RequestMapping(value = "/chat/{chatId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/chat/{chatId}/member", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView showChat(@PathVariable("chatId") int chatId) {
-        ModelAndView modelAndView = new ModelAndView();
-        Chat chat = chatDao.find(chatId);
-        return modelAndView;
+    public void hz(@PathVariable("chatId") int chatId) {
+
     }
 
-    @RequestMapping(value = "/chat/{chatId}", method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView addUsers(@PathVariable("chatId") int chatId) {
-        ModelAndView modelAndView = new ModelAndView();
-        return modelAndView;
-    }
+
 }

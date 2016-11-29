@@ -2,22 +2,28 @@ package ru.itis.models;
 
 
 public class Users {
-    int userId;
+    Integer userId;
     String userName;
     String userLogin;
-    int userPassword;
+    int userHashPassword;
 
     public Users() {
     }
 
-    public Users(int userId, String userName, String userLogin, int userPassword) {
+    public Users(Integer userId, String userName, String userLogin, int userPassword) {
         this.userId = userId;
         this.userName = userName;
         this.userLogin = userLogin;
-        this.userPassword = userPassword;
+        this.userHashPassword = userPassword;
     }
 
-    public int getUserId() {
+    public Users(String userName, String userLogin, int userPassword) {
+        this.userName = userName;
+        this.userLogin = userLogin;
+        this.userHashPassword = userPassword;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
@@ -29,7 +35,7 @@ public class Users {
         return userLogin;
     }
 
-    public int getUserPassword() {
-        return userPassword;
+    public Integer getUserHashPassword() {
+        return userHashPassword;
     }
 }

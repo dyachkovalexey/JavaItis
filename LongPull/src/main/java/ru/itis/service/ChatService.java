@@ -1,7 +1,10 @@
 package ru.itis.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.itis.dao.ChatDao;
 import ru.itis.dto.ChatDto;
+import ru.itis.models.Chat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,20 +12,22 @@ import java.util.List;
 @Service
 public class ChatService {
 
-    private List<ChatDto> listChats;
+    @Autowired
+    private ChatDao chatDao;
 
     public ChatService() {
-        listChats = new ArrayList<>();
     }
 
-    public void handleChats(ChatDto chatDto) {
-        synchronized (listChats) {
-            listChats.add(chatDto);
-            listChats.notify();
-        }
+    public void createNewChat(String chatName, String token) {
+        Integer userId = chatDao.findByToken(token);
+        Chat chat = new Chat(chatName, userId);
+        chatDao.save(chat);
     }
 
-    public List<ChatDto> getListChats() {
-        return listChats;
+    public List<Chat> showAllChats() {
+        List<Chat> chatList = chatDao.findAll();
+        return  chatList;
     }
+
+
 }

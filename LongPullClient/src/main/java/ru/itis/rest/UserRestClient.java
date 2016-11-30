@@ -4,6 +4,9 @@ package ru.itis.rest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.itis.dtos.UserDto;
+import ru.itis.models.User;
+
+import java.util.List;
 
 public class UserRestClient {
 
@@ -17,10 +20,11 @@ public class UserRestClient {
         restTemplate.postForObject("http://localhost:8081/users", userDto, UserDto.class);
     }
 
-    public UserDto[] registration() {
-        ResponseEntity<UserDto[]> responseEntity = restTemplate.getForEntity("http://localhost:8081/users", UserDto[].class);
-        UserDto[] userDtos = responseEntity.getBody();
 
-        return userDtos;
+    public void registration(String name,String login,Integer password) {
+        //restTemplate.postForObject("http://localhost:8081/users", user, User.class);
+        User user = new User(name, login, password);
+        Object[] list = {name, login, password};
+        restTemplate.postForObject("http://localhost:8081/users", list, Object[].class);
     }
 }

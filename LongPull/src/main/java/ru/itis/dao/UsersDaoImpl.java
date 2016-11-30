@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.itis.models.Users;
 import ru.itis.utils.UserMapper;
 
@@ -20,13 +19,12 @@ import java.util.Map;
 @Service
 public class UsersDaoImpl implements  UsersDao{
 
-    @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     //language=SQL
     public static final String SQL_FIND_ALL = "SELECT * FROM chat_user";
     //language=SQL
-    public static final String SQL_FIND_BY_ID = "SELECT * FROM chat_user WHERE user_id=:userId";
+    public static final String SQL_FIND_BY_LOGIN = "SELECT * FROM chat_user WHERE user_login=:userLogin";
     //language=SQL
     public static final String SQL_ADD_TO_DB = "INSERT INTO chat_user (user_name, user_login, user_hash_password) VALUES " +
             "(:userName, :userLogin, :userHashPassword)";
@@ -54,9 +52,9 @@ public class UsersDaoImpl implements  UsersDao{
     }
 
     @Override
-    public Users find(Integer id) {
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userId", id);
-        Users users = (Users)namedParameterJdbcTemplate.queryForObject(SQL_FIND_BY_ID, sqlParameterSource, new UserMapper());
+    public Users find(String login) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("userLogin", login);
+        Users users = (Users)namedParameterJdbcTemplate.queryForObject(SQL_FIND_BY_LOGIN, sqlParameterSource, new UserMapper());
         return users;
     }
 
@@ -86,9 +84,9 @@ public class UsersDaoImpl implements  UsersDao{
     }
 
     @Override
-    public void addToken(Users user, String token) {
+    public void addToken(Integer userId, String token) {
         Map map = new HashMap();
-        map.put("userId", user.getUserId());
+        map.put("userId", userId);
         map.put("token", token);
         namedParameterJdbcTemplate.update(SQL_ADD_TOKEN, map);
     }

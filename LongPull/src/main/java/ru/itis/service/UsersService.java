@@ -14,9 +14,11 @@ public class UsersService {
 
     @Autowired
     private UsersDao usersDao;
+
     private SecureRandom random = new SecureRandom();
 
     public UsersService() {
+
     }
 
     public String nextSessionId() {
@@ -31,7 +33,9 @@ public class UsersService {
             Users newUser = new Users(userName, login, password);
             usersDao.save(newUser);
             String token = nextSessionId();
-            usersDao.addToken(newUser, token);
+            Users newUserWithId = usersDao.findByLogin(newUser.getUserLogin());
+            System.out.println(newUserWithId.getUserId());
+            usersDao.addToken(newUser.getUserId(), token);
             return token;
         }
     }

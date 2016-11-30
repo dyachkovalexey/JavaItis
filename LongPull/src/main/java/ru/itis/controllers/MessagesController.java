@@ -16,9 +16,9 @@ public class MessagesController {
     @Autowired
     MessagesService messagesService;
 
-    @RequestMapping(value = "/chat/{chatId}/messages", method = RequestMethod.GET)
-    //TODO: refractor
+    /*@RequestMapping(value = "/chat/{chatId}/messages", method = RequestMethod.GET)
     public List<MessageDto> getMessage(@PathVariable("chatId") Integer chatId) {
+    //TODO:
         synchronized (messagesService.getNewMessages()) {
             // пока список пустой
             while (messagesService.getNewMessages().isEmpty()) {
@@ -36,7 +36,7 @@ public class MessagesController {
             // отправили ответ
             return result;
         }
-    }
+    }*/
 
     @RequestMapping(value = "/chat/{chatId}/messages?get=all", method = RequestMethod.GET)
     public List<MessageDto> getAllMessages(@PathVariable("chatId") Integer chatId) {

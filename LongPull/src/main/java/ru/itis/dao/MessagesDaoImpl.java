@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ru.itis.dto.MessageDto;
 import ru.itis.models.Messages;
 import ru.itis.models.Users;
@@ -16,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository
+@Service
 public class MessagesDaoImpl implements  MessagesDao{
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

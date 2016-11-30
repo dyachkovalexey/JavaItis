@@ -1,9 +1,8 @@
 package ru.itis.service;
 
-import ru.itis.controllers.MyRestClient;
-import ru.itis.models.MessageDto;
+import ru.itis.rest.MessageRestClient;
+import ru.itis.dtos.MessageDto;
 
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,12 +16,12 @@ public class ClientMessagesService {
 
     // обертка над RestTemplate - класс, позволяющий отправлять HTTP сообщения
     // на сервер
-    private MyRestClient myRestClient;
+    private MessageRestClient messageRestClient;
 
     public ClientMessagesService() {
         // создали пул потоков из одного потока
         executorService = Executors.newFixedThreadPool(1);
-        myRestClient = new MyRestClient();
+        messageRestClient = new MessageRestClient();
     }
 
     private void messagesHandle() {
@@ -30,7 +29,7 @@ public class ClientMessagesService {
         Runnable handleMessagesTask = () -> {
             while(true) {
                 // мы получаем сообщения
-                /**MessageDto[]*/ List<MessageDto> messages = myRestClient.getMessages();
+                MessageDto[] messages = messageRestClient.getMessages();
                 // выводим каждое сообщение на экран
                 for (MessageDto currentMessage : messages) {
                     System.out.println(currentMessage.getText());
@@ -50,9 +49,10 @@ public class ClientMessagesService {
             // считываем текст сообщения
             String text = scanner.nextLine();
             // создаем сообщение
-            MessageDto messageDto = new MessageDto("Lo0ny", text);
+            //TODO: get message
+            MessageDto messageDto = new MessageDto(1,text, 1);
             // отправляем на сервер
-            myRestClient.sendMessage(messageDto);
+            messageRestClient.sendMessage(messageDto);
         }
     }
 }

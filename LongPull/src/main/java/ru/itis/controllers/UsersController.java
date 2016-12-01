@@ -15,12 +15,12 @@ public class UsersController {
 
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public String registration(@RequestBody Object[] user) {
+    public void registration(@RequestBody Object[] user) {
         String name = user[0].toString();
         String login = user[1].toString();
         Integer password = Integer.parseInt(user[2].toString());
         String token = usersService.registrationNewUser(name, login, password);
-        return token;
+        //return token;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)

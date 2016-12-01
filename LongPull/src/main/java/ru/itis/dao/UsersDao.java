@@ -13,6 +13,6 @@ public interface UsersDao {
     void save(Users users);
     void update(Users user, String token);
     void saveUserToChat(Integer userId, Integer chatId);
-    void addToken(Integer userId, String token);
+    void addToken(Users user, String token);
     Users findByLogin(String login);
 }

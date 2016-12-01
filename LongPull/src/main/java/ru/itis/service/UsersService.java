@@ -26,36 +26,49 @@ public class UsersService {
     }
 
     public String registrationNewUser(String userName, String login, int password) {
-        List<Users> usersList = usersDao.findAll();
-        if (usersList.contains(login)==true) {
-            return "error 403";
-        } else {
-            Users newUser = new Users(userName, login, password);
-            usersDao.save(newUser);
-            String token = nextSessionId();
-            Users newUserWithId = usersDao.findByLogin(newUser.getUserLogin());
-            System.out.println(newUserWithId.getUserId());
-            usersDao.addToken(newUser.getUserId(), token);
-            return token;
+        Users newUser = new Users(userName, login, password);
+
+        synchronized (newUser) {
+            if (checkOnReg(login)==true) {
+                return "error 403";
+            } else {
+                usersDao.save(newUser);
+                String token = nextSessionId();
+                // обновление юзера, для получения id
+                Users newUserWithId = usersDao.findByLogin(newUser.getUserLogin());
+                usersDao.addToken(newUserWithId, token);
+                return token;
+            }
+        }
+    }
+
+    public boolean checkOnReg(String login) {
+        try {
+            Users user = usersDao.findByLogin(login);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
     }
 
     public String checkUser(String login, int password) {
-        List<Users> usersList = usersDao.findAll();
-        if (usersList.contains(login)==true) {
-            Users user = usersDao.findByLogin(login);
-            if (user.getUserHashPassword()==password) {
-                String token = nextSessionId();
-                usersDao.update(user, token);
-                return token;
-                //TODO: 200
+        synchronized (login) { //TODO:
+            if (checkOnReg(login) == false) {
+                Users user = usersDao.findByLogin(login);
+                if (user.getUserHashPassword() == password) {
+                    String token = nextSessionId();
+                    usersDao.update(user, token);
+                    return token;
+                    //TODO: 200
+                } else {
+                    //TODO: error 401
+                    return null;
+                }
             } else {
                 //TODO: error 401
                 return null;
             }
-        } else {
-            //TODO: error 401
-            return null;
         }
     }
 }

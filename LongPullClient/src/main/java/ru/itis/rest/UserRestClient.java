@@ -22,9 +22,12 @@ public class UserRestClient {
 
 
     public void registration(String name,String login,Integer password) {
-        //restTemplate.postForObject("http://localhost:8081/users", user, User.class);
-        User user = new User(name, login, password);
         Object[] list = {name, login, password};
         restTemplate.postForObject("http://localhost:8081/users", list, Object[].class);
+    }
+
+    public void login(String login, Integer password) {
+        Object[] list = {login, password};
+        restTemplate.postForObject("http:/localhost:8081/login", list, Object[].class);
     }
 }

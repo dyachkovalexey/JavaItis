@@ -84,9 +84,9 @@ public class UsersDaoImpl implements  UsersDao{
     }
 
     @Override
-    public void addToken(Integer userId, String token) {
+    public void addToken(Users user, String token) {
         Map map = new HashMap();
-        map.put("userId", userId);
+        map.put("userId", user.getUserId());
         map.put("token", token);
         namedParameterJdbcTemplate.update(SQL_ADD_TOKEN, map);
     }

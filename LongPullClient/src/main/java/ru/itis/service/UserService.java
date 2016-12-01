@@ -27,4 +27,12 @@ public class UserService {
         String password = scanner.nextLine();
         userRestClient.registration(userName, login, password.hashCode());
     }
+
+    public void login() {
+        System.out.println("enter your login");
+        String login = scanner.nextLine();
+        System.out.println("enter your password");
+        String password = scanner.nextLine();
+        userRestClient.login(login, password.hashCode());
+    }
 }
